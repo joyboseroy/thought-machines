@@ -1,6 +1,7 @@
 """Command line entry point: `python -m thought_machines demo logic`.
 
-Pillars are listed in tiers, from formal foundations up to spiking neurons.
+Pillars are listed in tiers, from formal foundations up to spiking neurons, followed by a second
+axis (tier 7) that orders five capabilities by when they appeared in evolution.
 """
 
 from __future__ import annotations
@@ -26,6 +27,11 @@ PILLAR_LIST = [
     ("predictive", "4 beyond the tribes", "Predictive coding and a toy of active inference"),
     ("memory", "5 memory", "Hopfield networks and Kanerva's sparse distributed memory"),
     ("spiking", "6 spiking neurons", "LIF and Izhikevich neurons, STDP, rank-order coding"),
+    ("steering", "7 evolutionary axis", "Bilaterians: chemotaxis and Braitenberg vehicles (valence)"),
+    ("reinforcement", "7 evolutionary axis", "Vertebrates: TD learning, Q-learning vs SARSA, dopamine error"),
+    ("simulating", "7 evolutionary axis", "Mammals: Dyna-Q, latent learning, search over a learned model"),
+    ("mentalizing", "7 evolutionary axis", "Primates: inverse planning and false belief"),
+    ("speaking", "7 evolutionary axis", "Humans: n-gram language, noisy-channel repair, cumulative culture"),
 ]
 
 PILLARS = {name: blurb for name, _, blurb in PILLAR_LIST}
