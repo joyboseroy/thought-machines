@@ -57,3 +57,17 @@ These three are where the idea of a universal learner meets the mathematics of w
 **Memory.** Hopfield, "Neural networks and physical systems with emergent collective computational abilities" (1982). Kanerva, *Sparse Distributed Memory* (1988).
 
 **Spiking.** Gerstner, Kistler, Naud and Paninski, *Neuronal Dynamics* (2014). Dayan and Abbott, *Theoretical Neuroscience* (2001). Izhikevich, "Simple model of spiking neurons" (2003). Song, Miller and Abbott, "Competitive Hebbian learning through spike-timing-dependent synaptic plasticity" (2000). Thorpe, Delorme and Van Rullen on rank-order coding (2001). Maass, "Networks of spiking neurons: the third generation of neural network models" (1997).
+
+## Tier 7: the evolutionary axis
+
+**Ordering idea.** Bennett, *A Brief History of Intelligence* (2023). Popular science, used only for the sequence: steering, reinforcing, simulating, mentalizing, speaking.
+
+**Steering.** Berg and Brown (1972) on bacterial run and tumble. Braitenberg, *Vehicles* (1984).
+
+**Reinforcing.** Sutton (1988) on temporal differences. Watkins and Dayan (1992) on Q-learning. Sutton and Barto, *Reinforcement Learning: An Introduction* (2018), for the random walk, cliff walking and the Dyna maze. Schultz, Dayan and Montague (1997) on dopamine as prediction error.
+
+**Simulating.** Sutton (1991) on Dyna. Tolman (1948) on cognitive maps and latent learning.
+
+**Mentalizing.** Baker, Saxe and Tenenbaum (2009) on action understanding as inverse planning. Wimmer and Perner (1983) on false belief.
+
+**Speaking.** Shannon (1948) on the noisy channel. Jurafsky and Martin, *Speech and Language Processing*, on n-gram models and smoothing. Tomasello (1999) on the ratchet effect in cumulative culture.

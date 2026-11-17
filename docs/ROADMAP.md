@@ -1,10 +1,17 @@
 # Roadmap
 
-## Done in v0.2
+## Done in v0.3
 
-All six v0.1 pillars plus the five tribes, the hybrid learner, the benchmark, causal reasoning, active learning, predictive coding, associative memory and spiking neurons. Every pillar has a demo and tests.
+All six v0.1 pillars plus the five tribes, the hybrid learner, the benchmark, causal reasoning, active learning, predictive coding, associative memory and spiking neurons, and the tier 7 evolutionary axis: steering, reinforcement, simulating, mentalizing and speaking. Every pillar has a demo and tests.
 
-## v0.3: closing the gaps the benchmark exposes
+## Next for tier 7
+
+- Continuous control for steering (a gradient with noise and a moving source).
+- A function-approximation version of TD, so the move from tabular to neural is visible.
+- Mentalizing with deception and with second-order beliefs (what A thinks B thinks C believes).
+- Iterated learning of a toy language, to show compositional structure emerging under a transmission bottleneck.
+
+## v0.4: closing the gaps the benchmark exposes
 
 The benchmark currently measures accuracy and fit time on boolean rules. The questions that make the comparison scientifically interesting are not yet measured:
 
@@ -15,13 +22,13 @@ The benchmark currently measures accuracy and fit time on boolean rules. The que
 - **Interpretability.** The tree prints rules and the genetic program prints a formula. Define a size or description-length score so the comparison is not purely verbal.
 - **Scaling.** How accuracy and cost change as the number of distractor features grows.
 
-## v0.3: the hybrid Domingos actually describes
+## v0.4: the hybrid Domingos actually describes
 
 RuleLogit is a toy. The synthesis in *The Master Algorithm* uses Markov logic networks for representation, posterior probability for evaluation, and genetic search plus gradient descent for optimisation. A first step: weighted first-order rules over a small domain, exact inference on a tiny ground network, weights learned by gradient descent and rule structure refined by evolution.
 
-## v0.3: more theories
+## v0.4: more theories
 
-- **Language.** n-gram models with smoothing, then a small neural language model, scored by perplexity on one corpus.
+- **Language.** The n-gram model now lives in `speaking/`. Next: a small neural language model scored by perplexity on the same corpus.
 - **Program induction.** Hypotheses as programs in a small language, a prior that penalises length, posterior by enumeration. This generalises the number game from fixed sets to generated ones.
 - **Active inference proper.** The predictive tier has a thermostat toy. A discrete-state agent that minimises expected free energy in a small maze would be the real thing.
 - **Conceptual spaces.** Categories as convex regions and prototypes as Voronoi cells, over embeddings learned from data instead of hand-built features.
