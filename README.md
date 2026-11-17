@@ -1,15 +1,16 @@
 # thought-machines
 
 An executable atlas of mathematical theories of mind, from Aristotle's syllogisms to spiking
-neurons. Plain Python, no dependencies, 99 tests, and a full demo run in about 15 seconds.
+neurons, with a second axis that orders five capabilities by when they evolved. Plain Python,
+no dependencies, 159 tests, and a full demo run in under 20 seconds.
 
 ```bash
 git clone https://github.com/joyboseroy/thought-machines
 cd thought-machines
 python -m thought_machines list           # the tiers
-python -m thought_machines demo all       # run everything (about 15 seconds)
+python -m thought_machines demo all       # run everything (under 20 seconds)
 python -m thought_machines demo spiking   # or one pillar
-python -m unittest discover -s tests -t . # 99 tests
+python -m unittest discover -s tests -t . # 159 tests
 ```
 
 Python 3.11 or later (tested on 3.11, 3.12 and 3.13). No numpy, no PyTorch, no API keys.
@@ -148,8 +149,32 @@ different project: [memory-under-constraints](https://github.com/joyboseroy/memo
 | 4 | `predictive` | Perception as minimising prediction error | predictive coding |
 | 5 | `memory` | Hopfield networks; Kanerva's sparse distributed memory | associative memory |
 | 6 | `spiking` | LIF and Izhikevich neurons, STDP, rank-order coding | the biological floor |
+| 7 | `steering` | Run-and-tumble chemotaxis; Braitenberg vehicles | approach and avoid |
+| 7 | `reinforcement` | TD(0) vs Monte Carlo; Q-learning vs SARSA; actor-critic; dopamine error | learning from reward |
+| 7 | `simulating` | Dyna-Q; latent learning; search over a learned model | thinking before acting |
+| 7 | `mentalizing` | Bayesian inverse planning; Sally-Anne false belief | modelling other minds |
+| 7 | `speaking` | n-gram language; noisy-channel repair; cumulative culture | shared code |
 
-Tier 2 is Domingos's five tribes (symbolists, connectionists, evolutionaries, Bayesians, analogizers). Tiers 4 to 6 go past them: causal reasoning and experimentation (Pearl and the scientific-method tradition), the predictive-mind literature, memory, and finally the spike-level substrate that all the higher tiers are abstractions of. See `docs/MAP.md` for the picture and `docs/READING.md` for the reading list.
+Tier 2 is Domingos's five tribes (symbolists, connectionists, evolutionaries, Bayesians, analogizers). Tiers 4 to 6 go past them: causal reasoning and experimentation (Pearl and the scientific-method tradition), the predictive-mind literature, memory, and finally the spike-level substrate that all the higher tiers are abstractions of. Tier 7 is a second axis rather than a seventh floor, and the next section explains it. See `docs/MAP.md` for the picture and `docs/READING.md` for the reading list.
+
+## A second axis: the order in which capabilities evolved
+
+Tiers 0 to 6 follow the history of *ideas*. Tier 7 follows a different order: the sequence in which animals acquired new ways of thinking. Max Bennett's *A Brief History of Intelligence* (2023) tells that story as five "breakthroughs", and each has a standard computational counterpart that this repository can run.
+
+| Breakthrough (Bennett) | Emerged with | Computational counterpart | Pillar | What the demo shows |
+|---|---|---|---|---|
+| Steering | early bilaterians | taxis control; valence | `steering` | A run-and-tumble agent climbs a gradient it cannot see; flipping the valence turns approach into avoidance; crossed Braitenberg wiring approaches a source and straight wiring flees it |
+| Reinforcing | early vertebrates | temporal-difference learning | `reinforcement` | TD beats Monte Carlo on the random walk; Q-learning takes the cliff edge while SARSA takes the safe path; the prediction error moves from reward to cue |
+| Simulating | early mammals | model-based planning | `simulating` | Dyna-Q needs far fewer real steps than Q-learning; an agent that explored without reward is near-optimal after one rewarded episode; search over the learned model finds a shortest route |
+| Mentalizing | early primates | belief modelling | `mentalizing` | A few observed steps identify an agent's goal; a tracker of who saw what predicts where Sally will look, where a model of the world alone is wrong |
+| Speaking | humans | language-mediated transfer | `speaking` | Context lowers perplexity and repairs damaged messages; a noisy channel caps how far knowledge can accumulate across generations |
+
+Two cautions about reading this table.
+
+* **It is an order of emergence, not a chain of logical dependency.** Reinforcement learning does not need a steering module to run, and a Dyna-Q agent does not import the TD code because evolution built vertebrates first. The order is a way to ask "what did this capability add that the previous one lacked?", and each pillar's demo is built to answer that question.
+* **Spiking is the substrate under all five, not a sixth step after them.** Every one of these capabilities ran on spiking neurons. That is why the tier 6 pillar sits below the whole table rather than after it.
+
+*A Brief History of Intelligence* is popular science, and its evolutionary story is a synthesis that specialists contest in places. It is used here only as an organising idea. The algorithms in tier 7 are standard (Sutton and Barto, Braitenberg, Baker, Saxe and Tenenbaum, n-gram models, cumulative culture models), and none of the tests depends on the evolutionary narrative being right.
 
 ## What the experiments show
 
@@ -176,6 +201,14 @@ Naive Bayes sits at chance on XOR and parity because its independence assumption
 
 **Memory has a cliff.** A 100-unit Hopfield network recalls 3 stored patterns from a 10% corrupted cue essentially always and 30 patterns almost never. Kanerva's memory shows a critical distance beyond which iterated recall drifts away from the stored word.
 
+**Learning from reward is not one thing.** On the cliff, Q-learning finds the 13-step edge path (reward -13) yet earns about -49 per episode while it learns, because exploration pushes it off the edge. SARSA settles on a 17-step safe path and earns about -20 per episode. In a conditioning trial the TD error starts at the reward (1.0) and ends at the cue (0.95^5, about 0.77) with the reward error near zero.
+
+**Thinking is cheaper than acting.** On a 6 by 9 maze with a 14-step solution, Dyna-Q with 50 simulated updates per real step is down to about 42 steps on its second episode, where plain Q-learning needs about 1300. After 3000 steps of reward-free exploration, the model-based agent is near-optimal (about 15 steps) from its third rewarded episode, and the model-free agent is still above 400 steps through episode 5.
+
+**Other minds are inferable, and wrong ones are predictable.** A noisily rational agent's goal is identified correctly 82% of the time after one observed step and about 99% after four. A predictor that tracks who witnessed what answers Sally-Anne correctly; a predictor that only knows the world does not.
+
+**Language is a repair mechanism and a ratchet.** On a toy grammar with agreement, held-out perplexity falls from 16.2 (unigram) to 3.1 (bigram) to 2.2 (trigram), and a trigram listener restores a damaged word about four times in five against one in four for a unigram listener. In the cumulative-culture task, fitness plateaus at about 0.72 without a channel and reaches 1.0 with a perfect one; at 40% transmission errors it stays at 0.76.
+
 **Spikes carry timing.** A leaky integrate-and-fire neuron's simulated firing rate matches the analytic formula to within 1.5 Hz. A neuron trained with STDP on inputs that all have the same average rate drives the weights of the correlated group to the maximum (1.0) and leaves the uncorrelated group near 0.5. A rank-order code classifies stimuli under random monotonic distortion at 1.00 where Euclidean template matching gets about 0.89.
 
 ## Design rules
@@ -195,6 +228,7 @@ thought_machines/
   hybrid/ benchmark/
   causal/ active/ rationality/ predictive/
   memory/ spiking/
+  steering/ reinforcement/ simulating/ mentalizing/ speaking/
   cli.py
 tests/
 docs/   MAP.md  READING.md  ROADMAP.md
@@ -209,19 +243,24 @@ docs/   MAP.md  READING.md  ROADMAP.md
 - RuleLogit is a toy in the direction of Domingos's synthesis. It is not a Markov logic network.
 - The benchmark is boolean rules on 8 features. It measures accuracy and fit time but not yet extrapolation, calibration or compositionality.
 - The spiking tier is single neurons and a single plastic neuron. It is not a network simulator.
+- The reinforcement and simulating pillars are tabular and deterministic: small grids, no function approximation.
+- Inverse planning assumes a noisily rational agent with a known set of candidate goals and a known beta. The false-belief tracker handles first-order beliefs and one nested level, with events witnessed or not, and nothing about deception.
+- The speaking tier uses a toy grammar and an abstract bit-string task for cumulative culture. It illustrates why a lossy channel limits accumulation. It does not model real language evolution.
 
 ## References
 
 Full per-tier reading is in `docs/READING.md`. The sources the code is most directly modelled
 on:
 
-**The two anchor books**
+**The anchor books**
 
 * Griffiths, T. L. (2026). *The Laws of Thought: The Quest for a Mathematical Theory of the
   Mind*. Henry Holt and Company. ISBN 978-1-250-35835-6. (UK edition: William Collins,
   ISBN 978-0-00-871148-1.)
 * Domingos, P. (2015). *The Master Algorithm: How the Quest for the Ultimate Learning Machine
   Will Remake Our World*. Basic Books.
+* Bennett, M. (2023). *A Brief History of Intelligence: Evolution, AI, and the Five Breakthroughs
+  That Made Our Brains*. Mariner Books. Used for the ordering in tier 7 only; see the caution above.
 
 **Logic and computation**
 
@@ -259,6 +298,32 @@ on:
 * Rao, R. P. N. and Ballard, D. H. (1999). Predictive coding in the visual cortex. *Nature
   Neuroscience* 2(1).
 
+**The evolutionary axis (tier 7)**
+
+* Berg, H. C. and Brown, D. A. (1972). Chemotaxis in *Escherichia coli* analysed by
+  three-dimensional tracking. *Nature* 239.
+* Braitenberg, V. (1984). *Vehicles: Experiments in Synthetic Psychology*. MIT Press.
+* Sutton, R. S. (1988). Learning to predict by the methods of temporal differences. *Machine
+  Learning* 3(1).
+* Watkins, C. J. C. H. and Dayan, P. (1992). Q-learning. *Machine Learning* 8.
+* Sutton, R. S. and Barto, A. G. (2018). *Reinforcement Learning: An Introduction* (2nd ed.). MIT
+  Press. The random walk, the cliff and the Dyna maze follow its examples.
+* Schultz, W., Dayan, P. and Montague, P. R. (1997). A neural substrate of prediction and
+  reward. *Science* 275.
+* Sutton, R. S. (1991). Dyna, an integrated architecture for learning, planning, and reacting.
+  *ACM SIGART Bulletin* 2(4).
+* Tolman, E. C. (1948). Cognitive maps in rats and men. *Psychological Review* 55(4).
+* Baker, C. L., Saxe, R. and Tenenbaum, J. B. (2009). Action understanding as inverse planning.
+  *Cognition* 113(3).
+* Wimmer, H. and Perner, J. (1983). Beliefs about beliefs: representation and constraining
+  function of wrong beliefs in young children's understanding of deception. *Cognition* 13(1).
+* Shannon, C. E. (1948). A mathematical theory of communication. *Bell System Technical
+  Journal* 27.
+* Jurafsky, D. and Martin, J. H. *Speech and Language Processing* (3rd ed. draft), chapter on
+  n-gram language models.
+* Tomasello, M. (1999). *The Cultural Origins of Human Cognition*. Harvard University Press,
+  for the ratchet effect.
+
 **Memory and spiking neurons**
 
 * Hopfield, J. J. (1982). Neural networks and physical systems with emergent collective
@@ -278,7 +343,7 @@ Please check them before citing, and open an issue if one is wrong.
 
 ## Status, authorship and citation
 
-Version 0.2. Every pillar has a demo and tests, and the roadmap (`docs/ROADMAP.md`) lists what
+Version 0.3. Every pillar has a demo and tests, and the roadmap (`docs/ROADMAP.md`) lists what
 would make the benchmark scientifically stronger: extrapolation, calibration, compositionality,
 transfer and interpretability scores. The experiments are small and have not been
 peer reviewed.
